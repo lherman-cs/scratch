@@ -1,0 +1,11 @@
+FROM golang:1.10.3-alpine AS builder
+
+WORKDIR /go/src/app
+COPY . .
+RUN CGO_ENABLED=0 go build
+
+FROM scratch
+EXPOSE 8080
+
+COPY --from=builder /go/src/app/app .
+ENTRYPOINT [ "./app" ]
